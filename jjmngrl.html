@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Password Authenticator</title>
+    <script type="text/javascript" src="mangiral.js"></script>
+    <script type="text/javascript">
+      function msg() {
+        var fullName = document.getElementById('name').value;
+        var password1 = document.getElementById('pass1').value;
+        var password2 = document.getElementById('pass2').value;
+        var resultObject = createPasswordObject(fullName, password1, password2);
+        
+        alert(JSON.stringify(resultObject));
+      }
+
+      function createPasswordObject(name, password1, password2) {
+        function validPass(password) {
+          function hasUpper(str) {
+            return /[A-Z]/.test(str);
+          }
+
+          function hasLower(str) {
+            return /[a-z]/.test(str);
+          }
+
+          function hasNum(str) {
+            return /[0-9]/.test(str);
+          }
+
+          return (
+            password.length > 7 &&
+            hasUpper(password) &&
+            hasLower(password) &&
+            hasNum(password)
+          );
+        }
+
+        function reversePass(password) {
+          let reversedPassword = "";
+          for (let i = password.length - 1; i >= 0; i--) {
+            reversedPassword += password[i];
+          }
+          return reversedPassword;
+        }
+
+        let newPassword;
+        if (password1 === password2 && validPass(password1)) {
+          newPassword = reversePass(password1);
+        } else {
+          newPassword = password1;
+        }
+
+        const resultObject = {
+          name: name,
+          newpassword: newPassword
+        };
+
+        return resultObject;
+      }
+    </script>
+  </head>
+  <body>
+    <form action="/action_page.php">
+      <label for="fname">Full Name:</label>
+      <input type="text" id="name" name="name" /><br /><br />
+      <label for="pass1">Password:</label>
+      <input type="text" id="pass1" name="pass1" /><br /><br />
+      <label for="pass2">Re-enter password:</label>
+      <input type="text" id="pass2" name="pass2" /><br /><br />
+      
+      <button type="button" onclick="msg()">Submit</button>
+    </form>
+  </body>
+</html>
